@@ -2,6 +2,7 @@ import {
 	type LoaderFunctionArgs,
 	type HeadersFunction,
 	type LinksFunction,
+	data,
 } from '@remix-run/node'
 import {
 	Links,
@@ -11,6 +12,7 @@ import {
 	ScrollRestoration,
 	useLoaderData,
 } from '@remix-run/react'
+import { NuqsAdapter } from 'nuqs/adapters/remix'
 import { HoneypotProvider } from 'remix-utils/honeypot/react'
 import { ClientHintCheck, getHints } from './utils/client-hints.tsx'
 import { getEnv } from './utils/env.server.ts'
@@ -39,7 +41,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 	const honeyProps = honeypot.getInputProps()
 
-	return Response.json(
+	return data(
 		{
 			requestInfo: {
 				hints: getHints(request),
@@ -69,7 +71,7 @@ function Document({
 }: {
 	children: React.ReactNode
 	nonce: string
-	env?: Record<string, string>
+	env?: Record<string, string | undefined>
 }) {
 	const allowIndexing = ENV.ALLOW_INDEXING !== 'false'
 	return (
@@ -115,7 +117,9 @@ function AppWithProviders() {
 	const data = useLoaderData<typeof loader>()
 	return (
 		<HoneypotProvider {...data.honeyProps}>
-			<App />
+			<NuqsAdapter>
+				<App />
+			</NuqsAdapter>
 		</HoneypotProvider>
 	)
 }
