@@ -1,5 +1,6 @@
 import path from 'node:path'
 import { vitePlugin as remix } from '@remix-run/dev'
+import { remixDevTools } from 'remix-development-tools'
 import { flatRoutes } from 'remix-flat-routes'
 import { defineConfig } from 'vite'
 import { envOnlyMacros } from 'vite-env-only'
@@ -29,6 +30,7 @@ export default defineConfig({
 	},
 	plugins: [
 		envOnlyMacros(),
+		remixDevTools(),
 		remix({
 			ignoredRouteFiles: ['**/*'],
 			serverModuleFormat: 'esm',

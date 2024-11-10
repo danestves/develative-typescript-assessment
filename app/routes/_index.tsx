@@ -47,11 +47,19 @@ export async function loader() {
 				timings,
 			},
 		),
-		time(() => fakerapi('@get/api/v2/custom'), {
-			type: 'fakerapi',
-			desc: 'Fetching users data from FakerAPI',
-			timings,
-		}),
+		time(
+			() =>
+				fakerapi('@get/api/v2/custom', {
+					query: {
+						_quantity: 10,
+					},
+				}),
+			{
+				type: 'fakerapi',
+				desc: 'Fetching users data from FakerAPI',
+				timings,
+			},
+		),
 	])
 
 	return data(
