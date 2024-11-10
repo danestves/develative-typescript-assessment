@@ -19,6 +19,8 @@ import { combineHeaders, getDomainUrl } from './utils/misc.tsx'
 import { useNonce } from './utils/nonce-provider.ts'
 import { makeTimings } from './utils/timing.server.ts'
 
+import './styles/app.css'
+
 export const links: LinksFunction = () => [
 	{ rel: 'preconnect', href: 'https://fonts.googleapis.com' },
 	{

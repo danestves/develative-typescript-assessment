@@ -1,3 +1,4 @@
+import path from 'node:path'
 import { vitePlugin as remix } from '@remix-run/dev'
 import { flatRoutes } from 'remix-flat-routes'
 import { defineConfig } from 'vite'
@@ -14,6 +15,11 @@ export default defineConfig({
 		},
 
 		sourcemap: true,
+	},
+	resolve: {
+		alias: {
+			'~bootstrap': path.resolve(__dirname, 'node_modules/bootstrap'),
+		},
 	},
 	plugins: [
 		envOnlyMacros(),
