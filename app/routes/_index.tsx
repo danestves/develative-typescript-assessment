@@ -81,13 +81,20 @@ export default function Index() {
 				<Col lg={6}>
 					<Card style={{ backgroundColor: '#1e1e1e', borderColor: '#333333' }}>
 						<Card.Body>
-							<Card.Title style={{ color: '#ffffff' }}>
-								Bitcoin for the last 30 days
-							</Card.Title>
 							<EChart
 								renderer="svg"
 								style={{
 									aspectRatio: '4 / 3',
+								}}
+								title={{
+									text: 'Bitcoin Price History',
+									left: 'center',
+									top: 10,
+									textStyle: {
+										color: '#ffffff',
+										fontSize: 16,
+										fontWeight: 'normal',
+									},
 								}}
 								xAxis={{
 									type: 'time',
@@ -165,10 +172,19 @@ export default function Index() {
 				<Col lg={6}>
 					<Card style={{ backgroundColor: '#1e1e1e', borderColor: '#333333' }}>
 						<Card.Body>
-							<Card.Title>Bitcoin Volatility</Card.Title>
 							<EChart
 								renderer="svg"
 								style={{ aspectRatio: '4 / 3' }}
+								title={{
+									text: 'Volume vs Price Volatility',
+									left: 'center',
+									top: 10,
+									textStyle: {
+										color: '#ffffff',
+										fontSize: 16,
+										fontWeight: 'normal',
+									},
+								}}
 								xAxis={{
 									type: 'value',
 									name: 'Volume (BTC)',
@@ -191,6 +207,41 @@ export default function Index() {
 										lineStyle: { color: '#333333' },
 									},
 								}}
+								dataZoom={[
+									{
+										type: 'inside', // Mouse wheel zoom
+										xAxisIndex: 0,
+										filterMode: 'empty',
+									},
+									{
+										type: 'inside', // Mouse wheel zoom
+										yAxisIndex: 0,
+										filterMode: 'empty',
+									},
+									{
+										type: 'slider', // Bottom slider
+										xAxisIndex: 0,
+										height: 20,
+										borderColor: '#333333',
+										backgroundColor: '#1e1e1e',
+										fillerColor: 'rgba(247, 147, 26, 0.2)',
+										handleStyle: {
+											color: '#F7931A',
+										},
+									},
+									{
+										type: 'slider', // Right slider
+										yAxisIndex: 0,
+										width: 20,
+										right: 0,
+										borderColor: '#333333',
+										backgroundColor: '#1e1e1e',
+										fillerColor: 'rgba(247, 147, 26, 0.2)',
+										handleStyle: {
+											color: '#F7931A',
+										},
+									},
+								]}
 								tooltip={{
 									trigger: 'item',
 									formatter: (params: any) => `
@@ -198,6 +249,14 @@ export default function Index() {
                                         <br/>
                                         Volatility: ${params.value[1].toFixed(2)}%
                                     `,
+								}}
+								toolbox={{
+									feature: {
+										saveAsImage: {
+											type: 'png',
+											title: 'Save',
+										},
+									},
 								}}
 								animation={true}
 								animationDuration={1000}
