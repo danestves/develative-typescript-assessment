@@ -1,7 +1,7 @@
 import { createFetch, createSchema } from '@better-fetch/fetch'
 import { z } from 'zod'
 
-import { ParameterValueSchema } from '#app/schemas/fakerapi.ts'
+import { CustomApiSchema, ParameterValueSchema } from '#app/schemas/fakerapi.ts'
 
 export const schema = createSchema({
 	'@get/api/v2/custom': {
@@ -24,14 +24,7 @@ export const schema = createSchema({
 				notes: ParameterValueSchema.optional().default('text'),
 			})
 			.optional(),
-		output: z.object({
-			status: z.string(),
-			code: z.number(),
-			locale: z.string(),
-			seed: z.string().nullable(),
-			total: z.number(),
-			data: z.array(z.any()), // TODO: type this
-		}),
+		output: CustomApiSchema,
 	},
 })
 

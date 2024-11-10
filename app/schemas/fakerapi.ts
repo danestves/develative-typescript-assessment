@@ -39,3 +39,27 @@ export const ParameterValueSchema = z.enum([
 	'website',
 	'word',
 ])
+
+export const User = z.object({
+	company: z.string(),
+	country: z.string(),
+	state: z.string(),
+	city: z.string(),
+	zipcode: z.string(),
+	employees: z.number(),
+	revenue: z.number(),
+	website: z.string().url(),
+	sales_rep: z.string(),
+	last_contacted: z.string(),
+	purchased: z.boolean(),
+	notes: z.string(),
+})
+
+export const CustomApiSchema = z.object({
+	status: z.string(),
+	code: z.number(),
+	locale: z.string(),
+	seed: z.string().nullable(),
+	total: z.number(),
+	data: z.array(User),
+})

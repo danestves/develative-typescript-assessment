@@ -6,9 +6,12 @@ import Card from 'react-bootstrap/Card'
 import Col from 'react-bootstrap/Col'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
+import { type z } from 'zod'
 
+import { type User } from '#app/schemas/fakerapi.ts'
 import { fakerapi } from '#app/services/api/config.server.ts'
 import { binance } from '#app/services/binance/config.server.ts'
+import { cache } from '#app/utils/cache.server.js'
 import { makeTimings, time } from '#app/utils/timing.server.ts'
 
 export const meta: MetaFunction = () => {
@@ -20,7 +23,11 @@ export const meta: MetaFunction = () => {
 
 export async function loader() {
 	const timings = makeTimings('index loader')
-	const [timeSeries, scatterPlot, users] = await Promise.all([
+	const users = cache.get('fakerapi-users') as Array<
+		z.infer<typeof User>
+	> | null
+
+	const [timeSeries, scatterPlot, fakerUsers] = await Promise.all([
 		time(
 			() =>
 				binance('@get/api/v3/klines', {
@@ -47,26 +54,32 @@ export async function loader() {
 				timings,
 			},
 		),
-		time(
-			() =>
-				fakerapi('@get/api/v2/custom', {
-					query: {
-						_quantity: 10,
+		!users?.length
+			? time(
+					() =>
+						fakerapi('@get/api/v2/custom', {
+							query: {
+								_quantity: 10,
+							},
+						}),
+					{
+						type: 'fakerapi',
+						desc: 'Fetching users data from FakerAPI',
+						timings,
 					},
-				}),
-			{
-				type: 'fakerapi',
-				desc: 'Fetching users data from FakerAPI',
-				timings,
-			},
-		),
+				)
+			: null,
 	])
+
+	if (!users?.length) {
+		cache.set('fakerapi-users', fakerUsers?.data?.data || [])
+	}
 
 	return data(
 		{
 			timeSeries: timeSeries.data || [],
 			scatterPlot: scatterPlot.data || [],
-			users: users.data?.data || [],
+			users: users?.length ? users : fakerUsers?.data?.data || [],
 		},
 		{
 			headers: {
