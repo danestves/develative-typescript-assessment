@@ -19,32 +19,34 @@ export const meta: MetaFunction = () => {
 
 export async function loader() {
 	const timings = makeTimings('index loader')
-	const timeSeries = await time(
-		() =>
-			binance('@get/api/v3/klines', {
-				query: {
-					symbol: 'BTCUSDT',
-					interval: '1d',
-					limit: 30,
-				},
-			}),
-		{
-			type: 'binance',
-			desc: 'Fetching time series data from Binance',
-			timings,
-		},
-	)
-	const scatterPlot = await time(
-		() =>
-			binance('@get/api/v3/klines', {
-				query: { symbol: 'BTCUSDT', interval: '1d', limit: 180 },
-			}),
-		{
-			type: 'binance',
-			desc: 'Fetching scatter plot data from Binance',
-			timings,
-		},
-	)
+	const [timeSeries, scatterPlot] = await Promise.all([
+		time(
+			() =>
+				binance('@get/api/v3/klines', {
+					query: {
+						symbol: 'BTCUSDT',
+						interval: '1d',
+						limit: 30,
+					},
+				}),
+			{
+				type: 'binance',
+				desc: 'Fetching time series data from Binance',
+				timings,
+			},
+		),
+		time(
+			() =>
+				binance('@get/api/v3/klines', {
+					query: { symbol: 'BTCUSDT', interval: '1d', limit: 180 },
+				}),
+			{
+				type: 'binance',
+				desc: 'Fetching scatter plot data from Binance',
+				timings,
+			},
+		),
+	])
 
 	return data(
 		{ timeSeries: timeSeries.data || [], scatterPlot: scatterPlot.data || [] },
