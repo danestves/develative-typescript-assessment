@@ -110,7 +110,7 @@ app.use(
 				'connect-src': [MODE === 'development' ? 'ws:' : null, "'self'"].filter(
 					Boolean,
 				),
-				'font-src': ["'self'", 'fonts.gstatic.com'],
+				'font-src': ["'self'", 'data:', 'fonts.gstatic.com'],
 				'frame-src': ["'self'"],
 				'img-src': ["'self'", 'data:'],
 				'style-src': ["'self'", "'unsafe-inline'", 'fonts.googleapis.com'],

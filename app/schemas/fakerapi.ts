@@ -48,7 +48,7 @@ export const User = z.object({
 	zipcode: z.string(),
 	employees: z.number(),
 	revenue: z.number(),
-	website: z.string().url(),
+	website: z.string(),
 	sales_rep: z.string(),
 	last_contacted: z.string(),
 	purchased: z.boolean(),

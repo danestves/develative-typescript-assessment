@@ -11,8 +11,9 @@ import { type z } from 'zod'
 import { type User } from '#app/schemas/fakerapi.ts'
 import { fakerapi } from '#app/services/api/config.server.ts'
 import { binance } from '#app/services/binance/config.server.ts'
-import { cache } from '#app/utils/cache.server.js'
+import { cache } from '#app/utils/cache.server.ts'
 import { makeTimings, time } from '#app/utils/timing.server.ts'
+import { UsersTable } from './__dashboard.tsx'
 
 export const meta: MetaFunction = () => {
 	return [
@@ -333,6 +334,14 @@ export default function Index() {
 								theme="dark"
 								backgroundColor="#1e1e1e"
 							/>
+						</Card.Body>
+					</Card>
+				</Col>
+
+				<Col xs>
+					<Card style={{ backgroundColor: '#1e1e1e', borderColor: '#333333' }}>
+						<Card.Body>
+							<UsersTable />
 						</Card.Body>
 					</Card>
 				</Col>
