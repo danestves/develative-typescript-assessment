@@ -113,6 +113,7 @@ app.use(
 				'font-src': ["'self'", 'fonts.gstatic.com'],
 				'frame-src': ["'self'"],
 				'img-src': ["'self'", 'data:'],
+				'style-src': ["'self'", "'unsafe-inline'", 'fonts.googleapis.com'],
 				'script-src': [
 					"'strict-dynamic'",
 					"'self'",

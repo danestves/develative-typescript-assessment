@@ -4,6 +4,12 @@ import { flatRoutes } from 'remix-flat-routes'
 import { defineConfig } from 'vite'
 import { envOnlyMacros } from 'vite-env-only'
 
+declare module '@remix-run/node' {
+	interface Future {
+		v3_singleFetch: true
+	}
+}
+
 const MODE = process.env.NODE_ENV
 
 export default defineConfig({
