@@ -8,6 +8,7 @@ import {
 import { RemixServer } from '@remix-run/react'
 import chalk from 'chalk'
 import { isbot } from 'isbot'
+import SSRProvider from 'react-bootstrap/SSRProvider'
 import { renderToPipeableStream } from 'react-dom/server'
 
 import { getEnv, init } from './utils/env.server.ts'
@@ -49,7 +50,9 @@ export default async function handleRequest(...args: DocRequestArgs) {
 
 		const { pipe, abort } = renderToPipeableStream(
 			<NonceProvider value={nonce}>
-				<RemixServer context={remixContext} url={request.url} nonce={nonce} />
+				<SSRProvider>
+					<RemixServer context={remixContext} url={request.url} nonce={nonce} />
+				</SSRProvider>
 			</NonceProvider>,
 			{
 				[callbackName]: () => {
