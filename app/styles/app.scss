@@ -1,1 +1,11 @@
+$theme-colors: (
+	'primary': #f7931a,
+	'dark': #121212,
+);
+
+$body-bg: #121212;
+$body-color: #ffffff;
+$card-bg: #1e1e1e;
+$card-border-color: #333333;
+
 @import '../../node_modules/bootstrap/scss/bootstrap';
