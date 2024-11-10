@@ -113,10 +113,18 @@ export default function Index() {
 									axisLabel: {
 										formatter: (value: number) => `$${value.toLocaleString()}`,
 										color: '#b3b3b3',
+										rotate: 45,
 									},
 									splitLine: {
 										lineStyle: { color: '#333333' },
 									},
+								}}
+								grid={{
+									top: 60,
+									right: 16,
+									bottom: 0,
+									left: 0,
+									containLabel: true,
 								}}
 								tooltip={{
 									trigger: 'axis',
@@ -188,6 +196,8 @@ export default function Index() {
 								xAxis={{
 									type: 'value',
 									name: 'Volume (BTC)',
+									nameLocation: 'middle',
+									nameGap: 32,
 									axisLabel: {
 										formatter: (value: number) => value.toLocaleString(),
 										color: '#b3b3b3',
@@ -199,6 +209,8 @@ export default function Index() {
 								yAxis={{
 									type: 'value',
 									name: 'Price Volatility (%)',
+									nameLocation: 'middle',
+									nameGap: 56,
 									axisLabel: {
 										formatter: (value: number) => `${value.toFixed(2)}%`,
 										color: '#b3b3b3',
@@ -207,6 +219,40 @@ export default function Index() {
 										lineStyle: { color: '#333333' },
 									},
 								}}
+								grid={{
+									top: 80, // Increased to accommodate legend
+									right: 40, // Space for y-axis label
+									bottom: 64, // Space for x-axis label
+									left: 24, // Space for y-axis label
+									containLabel: true,
+								}}
+								series={[
+									{
+										name: 'BTC Volume vs Volatility', // Added name for legend
+										type: 'scatter',
+										data: scatterData,
+										symbolSize: 8,
+										itemStyle: {
+											color: '#F7931A',
+											opacity: 0.7,
+										},
+									},
+								]}
+								toolbox={{
+									right: 10,
+									top: 10,
+									itemSize: 15,
+									feature: {
+										saveAsImage: {
+											type: 'png',
+											title: 'Save',
+										},
+									},
+								}}
+								animation={true}
+								animationDuration={1000}
+								animationEasing="elasticOut"
+								animationDelay={0}
 								dataZoom={[
 									{
 										type: 'inside', // Mouse wheel zoom
@@ -222,6 +268,7 @@ export default function Index() {
 										type: 'slider', // Bottom slider
 										xAxisIndex: 0,
 										height: 20,
+										bottom: 10,
 										borderColor: '#333333',
 										backgroundColor: '#1e1e1e',
 										fillerColor: 'rgba(247, 147, 26, 0.2)',
@@ -233,7 +280,7 @@ export default function Index() {
 										type: 'slider', // Right slider
 										yAxisIndex: 0,
 										width: 20,
-										right: 0,
+										right: 10,
 										borderColor: '#333333',
 										backgroundColor: '#1e1e1e',
 										fillerColor: 'rgba(247, 147, 26, 0.2)',
@@ -250,31 +297,6 @@ export default function Index() {
                                         Volatility: ${params.value[1].toFixed(2)}%
                                     `,
 								}}
-								toolbox={{
-									feature: {
-										saveAsImage: {
-											type: 'png',
-											title: 'Save',
-										},
-									},
-								}}
-								animation={true}
-								animationDuration={1000}
-								animationEasing="elasticOut"
-								series={[
-									{
-										type: 'scatter',
-										data: scatterData,
-										symbolSize: 8,
-										itemStyle: {
-											color: '#F7931A',
-											opacity: 0.7,
-										},
-										animationDelay: (idx: number) => idx * 10,
-										animationDuration: 1500,
-										animationEasing: 'bounceOut',
-									},
-								]}
 								theme="dark"
 								backgroundColor="#1e1e1e"
 							/>
