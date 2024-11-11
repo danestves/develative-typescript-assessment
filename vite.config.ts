@@ -2,6 +2,7 @@ import path from 'node:path'
 import { vitePlugin as remix } from '@remix-run/dev'
 import { remixDevTools } from 'remix-development-tools'
 import { flatRoutes } from 'remix-flat-routes'
+import { remixRoutes } from 'remix-routes/vite'
 import { defineConfig } from 'vite'
 import { envOnlyMacros } from 'vite-env-only'
 
@@ -60,5 +61,6 @@ export default defineConfig({
 				})
 			},
 		}),
+		remixRoutes(),
 	],
 })

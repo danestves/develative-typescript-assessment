@@ -52,7 +52,7 @@ export const User = z.object({
 	sales_rep: z.string(),
 	last_contacted: z.string(),
 	purchased: z.boolean(),
-	notes: z.string(),
+	notes: z.string().optional(),
 })
 
 export const CustomApiSchema = z.object({
@@ -62,4 +62,32 @@ export const CustomApiSchema = z.object({
 	seed: z.string().nullable(),
 	total: z.number(),
 	data: z.array(User),
+})
+
+export const NewUserSchema = z.object({
+	company: z.string().min(1, 'Company is required'),
+	country: z.string().min(1, 'Country is required'),
+	state: z.string().min(1, 'State is required'),
+	city: z.string().min(1, 'City is required'),
+	zipcode: z
+		.string()
+		.regex(
+			/^\d{5}(-\d{4})?$/,
+			'Must be a valid USA ZIP code (e.g. 12345 or 12345-6789)',
+		),
+	employees: z.coerce
+		.number()
+		.int('Must be a whole number')
+		.positive('Must be greater than 0'),
+	revenue: z.coerce
+		.number()
+		.int('Must be a whole number')
+		.positive('Must be greater than 0'),
+	website: z.string().url('Must be a valid URL'),
+	sales_rep: z.string().min(1, 'Sales rep is required'),
+	last_contacted: z
+		.string()
+		.regex(/^\d{4}-\d{2}-\d{2}$/, 'Must be a valid date (YYYY-MM-DD)'),
+	purchased: z.boolean(),
+	notes: z.string().optional(),
 })

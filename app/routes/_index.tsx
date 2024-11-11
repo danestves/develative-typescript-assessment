@@ -1,14 +1,22 @@
+import { parseWithZod } from '@conform-to/zod'
 import { EChart } from '@kbox-labs/react-echarts'
-import { type HeadersFunction, type MetaFunction, data } from '@remix-run/node'
+import {
+	type ActionFunctionArgs,
+	type HeadersFunction,
+	type MetaFunction,
+	data,
+	redirect,
+} from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { DateTime } from 'luxon'
 import Card from 'react-bootstrap/Card'
 import Col from 'react-bootstrap/Col'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
+import { namedAction } from 'remix-utils/named-action'
 import { type z } from 'zod'
 
-import { type User } from '#app/schemas/fakerapi.ts'
+import { NewUserSchema, type User } from '#app/schemas/fakerapi.ts'
 import { fakerapi } from '#app/services/api/config.server.ts'
 import { binance } from '#app/services/binance/config.server.ts'
 import { cache } from '#app/utils/cache.server.ts'
@@ -113,7 +121,7 @@ export default function Index() {
 		<Container>
 			<Row className="g-4 py-4">
 				<Col lg={6}>
-					<Card style={{ backgroundColor: '#1e1e1e', borderColor: '#333333' }}>
+					<Card>
 						<Card.Body>
 							<EChart
 								renderer="svg"
@@ -212,7 +220,7 @@ export default function Index() {
 				</Col>
 
 				<Col lg={6}>
-					<Card style={{ backgroundColor: '#1e1e1e', borderColor: '#333333' }}>
+					<Card>
 						<Card.Body>
 							<EChart
 								renderer="svg"
@@ -339,7 +347,7 @@ export default function Index() {
 				</Col>
 
 				<Col xs>
-					<Card style={{ backgroundColor: '#1e1e1e', borderColor: '#333333' }}>
+					<Card>
 						<Card.Body>
 							<UsersTable />
 						</Card.Body>
@@ -348,4 +356,54 @@ export default function Index() {
 			</Row>
 		</Container>
 	)
+}
+
+export async function action({ request }: ActionFunctionArgs) {
+	return namedAction(request, {
+		async addNewUser() {
+			const formData = await request.formData()
+			const submission = parseWithZod(formData, { schema: NewUserSchema })
+
+			if (submission.status !== 'success') {
+				return Response.json(submission.reply())
+			}
+
+			const newUser = submission.value
+			const users = (cache.get('fakerapi-users') || []) as Array<
+				z.infer<typeof User>
+			>
+			const fieldsToCheck = [
+				'company',
+				'country',
+				'state',
+				'city',
+				'zipcode',
+				'employees',
+				'revenue',
+				'website',
+				'sales_rep',
+				'purchased',
+			]
+
+			const matchingUser = users?.find((entry) => {
+				const matchingFields = fieldsToCheck.filter(
+					(field) =>
+						entry[field as keyof typeof entry] ===
+						newUser[field as keyof typeof newUser],
+				)
+				return matchingFields.length >= 5
+			})
+
+			if (matchingUser) {
+				// update the user
+				Object.assign(matchingUser, newUser)
+			} else {
+				users?.push(newUser)
+			}
+
+			cache.set('fakerapi-users', users)
+
+			return redirect('/')
+		},
+	})
 }
