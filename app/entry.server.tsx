@@ -32,10 +32,6 @@ export default async function handleRequest(...args: DocRequestArgs) {
 	responseHeaders.set('fly-region', process.env.FLY_REGION ?? 'unknown')
 	responseHeaders.set('fly-app', process.env.FLY_APP_NAME ?? 'unknown')
 
-	if (process.env.NODE_ENV === 'production' && process.env.SENTRY_DSN) {
-		responseHeaders.append('Document-Policy', 'js-profiling')
-	}
-
 	const callbackName = isbot(request.headers.get('user-agent'))
 		? 'onAllReady'
 		: 'onShellReady'

@@ -1,4 +1,3 @@
-import path from 'node:path'
 import { vitePlugin as remix } from '@remix-run/dev'
 import { remixDevTools } from 'remix-development-tools'
 import { flatRoutes } from 'remix-flat-routes'
@@ -19,15 +18,10 @@ export default defineConfig({
 		cssMinify: MODE === 'production',
 
 		rollupOptions: {
-			external: [/node:.*/, 'fsevents'],
+			external: [/node:.*/, 'fsevents', 'react-bootstrap'],
 		},
 
 		sourcemap: true,
-	},
-	resolve: {
-		alias: {
-			'~bootstrap': path.resolve(__dirname, 'node_modules/bootstrap'),
-		},
 	},
 	plugins: [
 		envOnlyMacros(),

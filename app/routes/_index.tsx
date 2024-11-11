@@ -1,5 +1,4 @@
 import { parseWithZod } from '@conform-to/zod'
-import { EChart } from '@kbox-labs/react-echarts'
 import {
 	type ActionFunctionArgs,
 	type HeadersFunction,
@@ -16,6 +15,7 @@ import { $path } from 'remix-routes'
 import { namedAction } from 'remix-utils/named-action'
 import { type z } from 'zod'
 
+import { EChart } from '#app/components/echart.tsx'
 import { NewUserSchema, type User } from '#app/schemas/fakerapi.ts'
 import { fakerapi } from '#app/services/api/config.server.ts'
 import { binance } from '#app/services/binance/config.server.ts'
@@ -80,6 +80,14 @@ export async function loader() {
 				)
 			: null,
 	])
+
+	if (timeSeries.error) {
+		console.error('Error fetching time series data', timeSeries.error)
+	}
+
+	if (scatterPlot.error) {
+		console.error('Error fetching scatter plot data', scatterPlot.error)
+	}
 
 	if (!users?.length) {
 		cache.set('fakerapi-users', fakerUsers?.data?.data || [])
@@ -174,10 +182,10 @@ export default function Index() {
 									formatter: (params: any) => {
 										const [data] = params
 										return `
-                                  Date: ${DateTime.fromMillis(data.value[0]).toLocaleString()}
-                                  <br/>
-                                  Price: $${data.value[1].toLocaleString()}
-                                `
+                                          Date: ${DateTime.fromMillis(data.value[0]).toLocaleString()}
+                                          <br/>
+                                          Price: $${data.value[1].toLocaleString()}
+                                        `
 									},
 								}}
 								animation={true}
@@ -335,10 +343,10 @@ export default function Index() {
 								tooltip={{
 									trigger: 'item',
 									formatter: (params: any) => `
-                                        Volume: ${params.value[0].toLocaleString()} BTC
-                                        <br/>
-                                        Volatility: ${params.value[1].toFixed(2)}%
-                                    `,
+                                                Volume: ${params.value[0].toLocaleString()} BTC
+                                                <br/>
+                                                Volatility: ${params.value[1].toFixed(2)}%
+                                            `,
 								}}
 								theme="dark"
 								backgroundColor="#1e1e1e"

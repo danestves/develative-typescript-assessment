@@ -4,7 +4,7 @@
 #
 
 app = 'develative-typescript-assessment'
-primary_region = 'mia'
+primary_region = 'qro'
 kill_signal = "SIGINT"
 kill_timeout = 5
 swap_size_mb = 512
