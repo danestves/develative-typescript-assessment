@@ -7,8 +7,5 @@ node_modules
 .env
 .cache
 
-/app/styles/app.css
-/app/styles/app.css.map
-
 # Easy way to create temporary files/folders that won't accidentally be added to git
 *.local.*
