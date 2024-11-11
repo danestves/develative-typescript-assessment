@@ -8,13 +8,14 @@ import Col from 'react-bootstrap/Col'
 import BootstrapForm from 'react-bootstrap/Form'
 import Modal from 'react-bootstrap/Modal'
 import Row from 'react-bootstrap/Row'
+import Stack from 'react-bootstrap/Stack'
 import { $path } from 'remix-routes'
 
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-material.css'
 
 import { NewUserSchema } from '#app/schemas/fakerapi.ts'
-import { useIsPending } from '#app/utils/misc.js'
+import { useIsPending } from '#app/utils/misc.tsx'
 import { type loader } from './_index.tsx'
 
 export function UsersTable() {
@@ -23,9 +24,21 @@ export function UsersTable() {
 
 	return (
 		<div>
-			<div className="mb-4 flex justify-between">
-				<Button onClick={() => setAction('users:create')}>Add user</Button>
-			</div>
+			<Stack
+				direction="horizontal"
+				gap={3}
+				className="justify-content-end mb-3"
+			>
+				<ResetData />
+
+				<Button
+					className="px-3"
+					size="sm"
+					onClick={() => setAction('users:create')}
+				>
+					Add user
+				</Button>
+			</Stack>
 
 			<div className="ag-theme-material-dark ag-theme-material-custom">
 				<AgGridReact
@@ -77,6 +90,30 @@ export function UsersTable() {
 
 			<AddUserModal />
 		</div>
+	)
+}
+
+export function ResetData() {
+	const formAction = $path('/', {
+		index: '',
+		_action: 'resetData',
+	})
+	const isPending = useIsPending({
+		formAction,
+	})
+
+	return (
+		<Form action={formAction} method="post">
+			<Button
+				variant="outline-danger"
+				className="px-3"
+				size="sm"
+				type="submit"
+				disabled={isPending}
+			>
+				{isPending ? 'Resetting...' : 'Reset data'}
+			</Button>
+		</Form>
 	)
 }
 
@@ -133,14 +170,15 @@ export function AddUserModal() {
 					<Row className="g-3">
 						{/* Company Information */}
 						<Col xs={12}>
-							<h6 className="text-muted mb-3">Company Information</h6>
+							<h6 className="text-muted fw-normal mb-2">Company information</h6>
 							<Row className="g-3">
 								<BootstrapForm.Group as={Col} md={6}>
-									<BootstrapForm.Label className="small">
+									<BootstrapForm.Label className="small fw-semibold">
 										Company
 									</BootstrapForm.Label>
 									<BootstrapForm.Control
 										{...getInputProps(fields.company, { type: 'text' })}
+										size="sm"
 										isInvalid={!!fields.company.errors?.length}
 									/>
 									{fields.company.errors?.length ? (
@@ -154,11 +192,12 @@ export function AddUserModal() {
 								</BootstrapForm.Group>
 
 								<BootstrapForm.Group as={Col} md={3}>
-									<BootstrapForm.Label className="small">
+									<BootstrapForm.Label className="small fw-semibold">
 										Employees
 									</BootstrapForm.Label>
 									<BootstrapForm.Control
 										{...getInputProps(fields.employees, { type: 'number' })}
+										size="sm"
 										isInvalid={!!fields.employees.errors?.length}
 									/>
 									{fields.employees.errors?.length ? (
@@ -172,11 +211,12 @@ export function AddUserModal() {
 								</BootstrapForm.Group>
 
 								<BootstrapForm.Group as={Col} md={3}>
-									<BootstrapForm.Label className="small">
+									<BootstrapForm.Label className="small fw-semibold">
 										Revenue
 									</BootstrapForm.Label>
 									<BootstrapForm.Control
 										{...getInputProps(fields.revenue, { type: 'number' })}
+										size="sm"
 										isInvalid={!!fields.revenue.errors?.length}
 									/>
 									{fields.revenue.errors?.length ? (
@@ -190,11 +230,12 @@ export function AddUserModal() {
 								</BootstrapForm.Group>
 
 								<BootstrapForm.Group as={Col} md={12}>
-									<BootstrapForm.Label className="small">
+									<BootstrapForm.Label className="small fw-semibold">
 										Website
 									</BootstrapForm.Label>
 									<BootstrapForm.Control
 										{...getInputProps(fields.website, { type: 'text' })}
+										size="sm"
 										isInvalid={!!fields.website.errors?.length}
 									/>
 									{fields.website.errors?.length ? (
@@ -209,16 +250,21 @@ export function AddUserModal() {
 							</Row>
 						</Col>
 
+						<Col xs={12}>
+							<hr />
+						</Col>
+
 						{/* Location Information */}
 						<Col xs={12}>
-							<h6 className="text-muted mb-3">Location</h6>
+							<h6 className="text-muted mb-1">Location</h6>
 							<Row className="g-3">
 								<BootstrapForm.Group as={Col} md={6}>
-									<BootstrapForm.Label className="small">
+									<BootstrapForm.Label className="small fw-semibold">
 										Country
 									</BootstrapForm.Label>
 									<BootstrapForm.Control
 										{...getInputProps(fields.country, { type: 'text' })}
+										size="sm"
 										isInvalid={!!fields.country.errors?.length}
 									/>
 									{fields.country.errors?.length ? (
@@ -232,11 +278,12 @@ export function AddUserModal() {
 								</BootstrapForm.Group>
 
 								<BootstrapForm.Group as={Col} md={6}>
-									<BootstrapForm.Label className="small">
+									<BootstrapForm.Label className="small fw-semibold">
 										State
 									</BootstrapForm.Label>
 									<BootstrapForm.Control
 										{...getInputProps(fields.state, { type: 'text' })}
+										size="sm"
 										isInvalid={!!fields.state.errors?.length}
 									/>
 									{fields.state.errors?.length ? (
@@ -250,11 +297,12 @@ export function AddUserModal() {
 								</BootstrapForm.Group>
 
 								<BootstrapForm.Group as={Col} md={6}>
-									<BootstrapForm.Label className="small">
+									<BootstrapForm.Label className="small fw-semibold">
 										City
 									</BootstrapForm.Label>
 									<BootstrapForm.Control
 										{...getInputProps(fields.city, { type: 'text' })}
+										size="sm"
 										isInvalid={!!fields.city.errors?.length}
 									/>
 									{fields.city.errors?.length ? (
@@ -268,11 +316,12 @@ export function AddUserModal() {
 								</BootstrapForm.Group>
 
 								<BootstrapForm.Group as={Col} md={6}>
-									<BootstrapForm.Label className="small">
+									<BootstrapForm.Label className="small fw-semibold">
 										Zipcode
 									</BootstrapForm.Label>
 									<BootstrapForm.Control
 										{...getInputProps(fields.zipcode, { type: 'text' })}
+										size="sm"
 										isInvalid={!!fields.zipcode.errors?.length}
 									/>
 									{fields.zipcode.errors?.length ? (
@@ -287,16 +336,21 @@ export function AddUserModal() {
 							</Row>
 						</Col>
 
+						<Col xs={12}>
+							<hr />
+						</Col>
+
 						{/* Sales Information */}
 						<Col xs={12}>
-							<h6 className="text-muted mb-3">Sales Information</h6>
+							<h6 className="text-muted mb-1">Sales information</h6>
 							<Row className="g-3">
 								<BootstrapForm.Group as={Col} md={6}>
-									<BootstrapForm.Label className="small">
-										Sales Rep
+									<BootstrapForm.Label className="small fw-semibold">
+										Sales representative
 									</BootstrapForm.Label>
 									<BootstrapForm.Control
 										{...getInputProps(fields.sales_rep, { type: 'text' })}
+										size="sm"
 										isInvalid={!!fields.sales_rep.errors?.length}
 									/>
 									{fields.sales_rep.errors?.length ? (
@@ -310,11 +364,12 @@ export function AddUserModal() {
 								</BootstrapForm.Group>
 
 								<BootstrapForm.Group as={Col} md={6}>
-									<BootstrapForm.Label className="small">
-										Last Contacted
+									<BootstrapForm.Label className="small fw-semibold">
+										Last contacted
 									</BootstrapForm.Label>
 									<BootstrapForm.Control
 										{...getInputProps(fields.last_contacted, { type: 'date' })}
+										size="sm"
 										isInvalid={!!fields.last_contacted.errors?.length}
 									/>
 									{fields.last_contacted.errors?.length ? (
@@ -331,7 +386,7 @@ export function AddUserModal() {
 									<BootstrapForm.Check
 										{...getInputProps(fields.purchased, { type: 'checkbox' })}
 										label="Has purchased"
-										className="small"
+										className="small fw-semibold"
 										isInvalid={!!fields.purchased.errors?.length}
 									/>
 									{fields.purchased.errors?.length ? (
@@ -345,12 +400,13 @@ export function AddUserModal() {
 								</BootstrapForm.Group>
 
 								<BootstrapForm.Group as={Col} md={12}>
-									<BootstrapForm.Label className="small">
+									<BootstrapForm.Label className="small fw-semibold">
 										Notes
 									</BootstrapForm.Label>
 									<BootstrapForm.Control
 										{...getTextareaProps(fields.notes)}
 										as="textarea"
+										size="sm"
 										rows={3}
 									/>
 								</BootstrapForm.Group>

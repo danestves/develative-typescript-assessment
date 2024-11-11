@@ -104,16 +104,14 @@ app.use(
 		referrerPolicy: { policy: 'same-origin' },
 		crossOriginEmbedderPolicy: false,
 		contentSecurityPolicy: {
-			// NOTE: Remove reportOnly when you're ready to enforce this CSP
-			reportOnly: true,
 			directives: {
 				'connect-src': [MODE === 'development' ? 'ws:' : null, "'self'"].filter(
 					Boolean,
 				),
-				'font-src': ["'self'", 'data:', 'fonts.gstatic.com'],
+				'font-src': ["'self'", 'data:', 'rsms.me'],
 				'frame-src': ["'self'"],
 				'img-src': ["'self'", 'data:'],
-				'style-src': ["'self'", "'unsafe-inline'", 'fonts.googleapis.com'],
+				'style-src': ["'self'", "'unsafe-inline'", 'rsms.me'],
 				'script-src': [
 					"'strict-dynamic'",
 					"'self'",

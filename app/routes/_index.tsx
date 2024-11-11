@@ -361,6 +361,14 @@ export default function Index() {
 
 export async function action({ request }: ActionFunctionArgs) {
 	return namedAction(request, {
+		async resetData() {
+			cache.clear()
+
+			return redirectWithToast($path('/'), {
+				message: 'Data reset successfully',
+				type: 'success',
+			})
+		},
 		async addNewUser() {
 			const formData = await request.formData()
 			const submission = parseWithZod(formData, { schema: NewUserSchema })
