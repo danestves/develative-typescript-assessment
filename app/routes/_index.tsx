@@ -5,7 +5,6 @@ import {
 	type HeadersFunction,
 	type MetaFunction,
 	data,
-	redirect,
 } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { DateTime } from 'luxon'
@@ -13,6 +12,7 @@ import Card from 'react-bootstrap/Card'
 import Col from 'react-bootstrap/Col'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
+import { $path } from 'remix-routes'
 import { namedAction } from 'remix-utils/named-action'
 import { type z } from 'zod'
 
@@ -21,6 +21,7 @@ import { fakerapi } from '#app/services/api/config.server.ts'
 import { binance } from '#app/services/binance/config.server.ts'
 import { cache } from '#app/utils/cache.server.ts'
 import { makeTimings, time } from '#app/utils/timing.server.ts'
+import { redirectWithToast } from '#app/utils/toast.server.ts'
 import { UsersTable } from './__dashboard.tsx'
 
 export const meta: MetaFunction = () => {
@@ -403,7 +404,12 @@ export async function action({ request }: ActionFunctionArgs) {
 
 			cache.set('fakerapi-users', users)
 
-			return redirect('/')
+			return redirectWithToast($path('/'), {
+				message: matchingUser
+					? 'User updated successfully'
+					: 'User created successfully',
+				type: 'success',
+			})
 		},
 	})
 }
