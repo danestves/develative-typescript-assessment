@@ -49,8 +49,7 @@ RUN bun run build
 FROM base
 
 ENV FLY="true"
-ENV INTERNAL_PORT="8080"
-ENV PORT="8081"
+ENV PORT="8080"
 ENV NODE_ENV="production"
 
 WORKDIR /app
