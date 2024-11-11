@@ -1,16 +1,11 @@
-# syntax = docker/dockerfile:1
-
-# Adjust BUN_VERSION as desired
-ARG BUN_VERSION=1.1.34
-FROM oven/bun:${BUN_VERSION}-slim as base
+# base node image
+FROM node:20-bookworm-slim as base
 
 # set for base and all layer that inherit from it
 ENV NODE_ENV production
 
-LABEL fly_launch_runtime="Remix"
-
-# Set production environment
-ENV NODE_ENV="production"
+# install bun globally
+RUN npm install -g bun
 
 # Install all node_modules, including dev dependencies
 FROM base as deps
