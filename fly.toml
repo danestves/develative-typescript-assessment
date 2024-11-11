@@ -1,0 +1,42 @@
+# fly.toml app configuration file generated for develative-typescript-assessment on 2024-11-10T21:38:42-04:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'develative-typescript-assessment'
+primary_region = 'mia'
+kill_signal = "SIGINT"
+kill_timeout = 5
+swap_size_mb = 512
+
+[experimental]
+allowed_public_ports = [ ]
+auto_rollback = true
+
+[build]
+
+[[services]]
+internal_port = 8080
+processes = [ "app" ]
+protocol = "tcp"
+script_checks = [ ]
+
+  [services.concurrency]
+  hard_limit = 100
+  soft_limit = 80
+  type = "requests"
+
+  [[services.ports]]
+  handlers = [ "http" ]
+  port = 80
+  force_https = true
+
+  [[services.ports]]
+  handlers = [ "tls", "http" ]
+  port = 443
+
+  [[services.tcp_checks]]
+  grace_period = "1s"
+  interval = "15s"
+  restart_limit = 0
+  timeout = "2s"

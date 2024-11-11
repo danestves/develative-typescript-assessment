@@ -17,7 +17,8 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "typecheck": "tsc",
-    "sass": "sass --watch app/:app/"
+    "sass": "sass --watch app/:app/",
+    "start": "cross-env NODE_ENV=production node ."
   },
   "prettier": "@epic-web/config/prettier",
   "dependencies": {
@@ -68,6 +69,7 @@
   },
   "devDependencies": {
     "@epic-web/config": "1.15.0",
+    "@flydotio/dockerfile": "^0.5.9",
     "@remix-run/dev": "2.14.0",
     "@total-typescript/ts-reset": "0.6.1",
     "@types/compression": "1.7.5",
